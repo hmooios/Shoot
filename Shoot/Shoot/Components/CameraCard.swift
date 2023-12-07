@@ -8,46 +8,49 @@
 import SwiftUI
 
 struct CameraCard: View {
-    var camera:Camera
+    @EnvironmentObject var cameraManager: CameraManager
+    var camera: Camera
+    
     var body: some View {
-            VStack{
-                Image(camera.image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 180)
-                    .cornerRadius(10)
-                ZStack{
-//                    Rectangle()
-//                        .foregroundColor(.white)
-                    
-                    HStack {
-                        VStack(alignment:.leading){
-                            Text(camera.name)
-                                .bold()
-                            Text("$\(camera.price)")
-                                .font(.subheadline)
-                            
-
-                        }
-                        Spacer()
-                        Image(systemName: "cart.badge.plus")
-                            .padding(1)
-                                                        
-                            
-                    }
-                   
-
-                }
-                .frame(width: 180,height: 40)
-                .padding()
-
-                
-            }
-         //   .shadow(radius: 2)
+        VStack(spacing: 8) {
+            Image(camera.image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .cornerRadius(10)
             
-        
+            VStack(alignment: .leading, spacing: 4) {
+                Text(camera.name)
+                    .font(.headline)
+                    .bold()
+                
+                HStack {
+                    Text("$\(camera.price)")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        cameraManager.addCamera(camera: camera)
+                    }, label: {
+                        Image(systemName: "cart.badge.plus")
+                                                  .padding(8)
+                                                  .foregroundColor(.black) // Text color
+                                                  .overlay(
+                                                      Capsule(style: .continuous)
+                                                          .stroke(Color.black, lineWidth: 1)
+                                                  )
+                    })
+                }
+            }
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(radius: 3)
     }
 }
+
 
 #Preview {
     CameraCard(camera: cameraLists[0])
